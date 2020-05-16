@@ -214,13 +214,39 @@ int main( void )
 	GLuint botaoAmareloEsquerdoTexture = loadDDS("botaoAmareloEsquerdo.dds");
 	GLuint meioRestoJogoTexture = loadDDS("meioRestoJogo.dds");
 	GLuint restoJogoTexture = loadDDS("restoJogo.dds");
+	GLuint EnterToStartTexture = loadDDS("mesa-com-tostart-desgrama.dds");
 
 	// Get a handle for our "myTextureSampler" uniform
 	GLuint TextureID  = glGetUniformLocation(programID, "myTextureSampler");
 
 	// Read our .obj file
-	// -------------------------------------------------------------------  LOAD OBJETOS ---------------------------------------------------------
-	// BOTAO AMARELO
+	//------------------------------------------------------------------  LOAD OBJETOS ---------------------------------------------------------
+	//------ ENTER TO START --------------------------------------------------------------------------------------------------------------------
+	std::vector<glm::vec3> EnterToStartVertices;
+	std::vector<glm::vec2> EnterToStartUvs;
+	std::vector<glm::vec3> EnterToStartNormals;
+	std::vector<unsigned short> EnterToStartIndices;
+	std::vector<glm::vec3> EnterToStartIndexedVertices;
+	std::vector<glm::vec2> EnterToStartIndexedUvs;
+	std::vector<glm::vec3> EnterToStartIndexedNormals;
+	GLuint EnterToStartVertexbuffer;
+	GLuint EnterToStartUvbuffer;
+	GLuint EnterToStartNormalbuffer;
+	GLuint EnterToStartElementbuffer;
+	bool EnterToStart = loadOBJ("start-to-enter.obj", EnterToStartVertices, EnterToStartUvs, EnterToStartNormals);
+	// chama load buffers e cria buffer para o botao tal;
+	indexVBO(EnterToStartVertices, EnterToStartUvs, EnterToStartNormals, EnterToStartIndices, EnterToStartIndexedVertices, EnterToStartIndexedUvs, EnterToStartIndexedNormals);
+	loadBuffers(
+		EnterToStartIndices,
+		EnterToStartIndexedVertices,
+		EnterToStartIndexedUvs,
+		EnterToStartIndexedNormals,
+		&EnterToStartVertexbuffer,
+		&EnterToStartUvbuffer,
+		&EnterToStartNormalbuffer,
+		&EnterToStartElementbuffer
+	);
+	// ----------------------------------------------------------- BOTAO AMARELO ---------------------------------------------------------------
 	std::vector<glm::vec3> botaoAmareloVertices;
 	std::vector<glm::vec2> botaoAmareloUvs;
 	std::vector<glm::vec3> botaoAmareloNormals;
@@ -245,8 +271,7 @@ int main( void )
 		&botaoAmareloNormalbuffer,
 		&botaoAmareloElementbuffer
 	);
-
-	// BOTAO AZUL
+	// ------------------------------------------------------------ BOTAO AZUL ----------------------------------------------------------------
 	std::vector<glm::vec3> botaoAzulVertices;
 	std::vector<glm::vec2> botaoAzulUvs;
 	std::vector<glm::vec3> botaoAzulNormals;
@@ -270,7 +295,7 @@ int main( void )
 		&botaoAzulNormalbuffer,
 		&botaoAzulElementbuffer
 	);
-
+	// ---------------------------------------------------------- BOTAO VERDE ------------------------------------------------------------------
 	// BOTAO VERDE
 	std::vector<glm::vec3> botaoVerdeVertices;
 	std::vector<glm::vec2> botaoVerdeUvs;
@@ -295,8 +320,7 @@ int main( void )
 		&botaoVerdeNormalbuffer,
 		&botaoVerdeElementbuffer
 	);
-
-	// BOTAO VERMELHO
+	// --------------------------------------------------------- BOTAO VERMELHO ----------------------------------------------------------------
 	std::vector<glm::vec3> botaoVermelhoVertices;
 	std::vector<glm::vec2> botaoVermelhoUvs;
 	std::vector<glm::vec3> botaoVermelhoNormals;
@@ -320,8 +344,7 @@ int main( void )
 		&botaoVermelhoNormalbuffer,
 		&botaoVermelhoElementbuffer
 	);
-
-	// BOTAO AMARELO ESQUERDO
+	// -----------------------------------------------   BOTAO AMARELO ESQUERDO   -------------------------------------------------------------
 	std::vector<glm::vec3> botaoAmareloEsquerdoVertices;
 	std::vector<glm::vec2> botaoAmareloEsquerdoUvs;
 	std::vector<glm::vec3> botaoAmareloEsquerdoNormals;
@@ -345,8 +368,7 @@ int main( void )
 		&botaoAmareloEsquerdoNormalbuffer,
 		&botaoAmareloEsquerdoElementbuffer
 	);
-
-	// BOTAO AMARELO DIREITO
+	// -----------------------------------------------   BOTAO AMARELO DIREITO  -------------------------------------------------------------
 	std::vector<glm::vec3> botaoAmareloDireitoVertices;
 	std::vector<glm::vec2> botaoAmareloDireitoUvs;
 	std::vector<glm::vec3> botaoAmareloDireitoNormals;
@@ -370,8 +392,7 @@ int main( void )
 		&botaoAmareloDireitoNormalbuffer,
 		&botaoAmareloDireitoElementbuffer
 	);
-
-	// BOTAO VERMELHO MEIO
+	// --------------------------------------------------   BOTAO VERMELHO MEIO  -------------------------------------------------------------
 	std::vector<glm::vec3> botaoVermelhoMeioVertices;
 	std::vector<glm::vec2> botaoVermelhoMeioUvs;
 	std::vector<glm::vec3> botaoVermelhoMeioNormals;
@@ -395,8 +416,7 @@ int main( void )
 		&botaoVermelhoMeioNormalbuffer,
 		&botaoVermelhoMeioElementbuffer
 	);
-
-	//  MESA
+	// ------------------------------------------------------------- MESA -------------------------------------------------------------------
 	std::vector<glm::vec3> mesaVertices;
 	std::vector<glm::vec2> mesaUvs;
 	std::vector<glm::vec3> mesaNormals;
@@ -420,8 +440,7 @@ int main( void )
 		&mesaNormalbuffer,
 		&mesaElementbuffer
 	);
-
-	// resto jogo
+	// --------------------------------------------------------- resto jogo ------------------------------------------------------------------
 	std::vector<glm::vec3> restoJogoVertices;
 	std::vector<glm::vec2> restoJogoUvs;
 	std::vector<glm::vec3> restoJogoNormals;
@@ -445,8 +464,7 @@ int main( void )
 		&restoJogoNormalbuffer,
 		&restoJogoElementbuffer
 	);
-
-	// BOTAO  MEIO RESTO JOGO
+	// ---------------------------------------------------- BOTAO MEIO RESTO JOGO --------------------------------------------------------------
 	std::vector<glm::vec3> meioRestoJogoVertices;
 	std::vector<glm::vec2> meioRestoJogoUvs;
 	std::vector<glm::vec3> meioRestoJogoNormals;
@@ -484,21 +502,25 @@ int main( void )
 	glm::vec3 cameraFrontPosition = glm::vec3(0, 5, 15);
 	glm::vec3 cameraBackPosition = glm::vec3(0, 5, -15);
 	glm::vec3 cameraTopPosition = glm::vec3(0, 10, 0);
+	glm::vec3 cameraStartGame = glm::vec3(0, 5, 25);
 
 	glm::vec3 cameraNormalLookTo = glm::vec3(0, 1, 0);
 	glm::vec3 cameraTopLookTo = glm::vec3(0, 1, -1);
+	glm::vec3 cameraStartGameLookTo = glm::vec3(0, 5, 0);
 
 	glm::vec3 cameraHeadNormal = glm::vec3(0, 1, 0);
 	glm::vec3 cameraHeadUpsideDown = glm::vec3(0, -1, 0);
 
-	glm::vec3 cameraPosition = cameraFrontPosition;
-	glm::vec3 cameraLookTo = cameraNormalLookTo;
+	glm::vec3 cameraPosition = cameraStartGame;
+	glm::vec3 cameraLookTo = cameraStartGameLookTo;
 	glm::vec3 cameraHead = cameraHeadNormal;
 
 	bool animacao = false;
 	bool zSomar = false;
 	bool visualizarOrtho = false;
 	double pKeyTimePressed;
+	double EnterKeyTimePressed;
+	bool start = false;
 
 	glm::mat4 perspectiveProjection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
 	glm::mat4 ortogonalProjection = glm::ortho(-10.0f,10.0f,-10.0f,10.0f,0.0f,100.0f);
@@ -522,76 +544,11 @@ int main( void )
 
 		// Use our shader
 		glUseProgram(programID);
-
-		if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
-			if (!pKeyTimePressed || (currentTime - pKeyTimePressed) > 0.4) {
-				visualizarOrtho = !visualizarOrtho;
-				pKeyTimePressed = glfwGetTime();
-			}
-		}
-		if (visualizarOrtho) {
-			ProjectionMatrix = ortogonalProjection;
-		} else {
-			ProjectionMatrix = perspectiveProjection;
-		}
-		if (glfwGetKey(window, GLFW_KEY_F1) == GLFW_PRESS) {
-			animacao = false;
+		if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && !start) {
+			EnterKeyTimePressed = glfwGetTime();
+			start = true;
 			cameraPosition = cameraFrontPosition;
 			cameraLookTo = cameraNormalLookTo;
-			cameraHead = cameraHeadNormal;
-			gPosition1.z = 0.5f;
-		}
-		if (glfwGetKey(window, GLFW_KEY_F2) == GLFW_PRESS) {
-			animacao = false;
-			cameraPosition = cameraTopPosition;
-			cameraLookTo = cameraTopLookTo;
-			cameraHead = cameraHeadNormal;
-			gPosition1.z = 0.0f;
-		}
-		if (glfwGetKey(window, GLFW_KEY_F3) == GLFW_PRESS) {
-			animacao = false;
-			cameraPosition = cameraBackPosition;
-			cameraLookTo = cameraNormalLookTo;
-			cameraHead = cameraHeadNormal;
-			gPosition1.z = 0.5f;
-		}
-		if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
-			animacao = true;
-			zSomar = false;
-			cameraPosition = cameraFrontPosition;
-			cameraLookTo = cameraNormalLookTo;
-			cameraHead = cameraHeadNormal;
-		}
-		//--------------- INICIO DA ANIMAÇÃO CAMERA -----------------------------------------------------------------------------------------------
-		if (animacao) {
-			if (cameraPosition.y < 10 && !zSomar) {
-				cameraPosition.y += 5.0f * deltaTime;
-			}
-			if (cameraPosition.y > 10) {
-
-				if (zSomar) {
-					cameraPosition.z += 5.0f * deltaTime;
-				} else {
-					cameraPosition.z -= 5.0f * deltaTime;
-				}
-
-				if (cameraPosition.z < 0) {
-					zSomar = true;
-					cameraPosition.z *= -1;
-					cameraLookTo.z *= -1;
-				}
-			}
-			if (cameraPosition.z > 15 && zSomar) {
-				if (cameraPosition.y > 5) {
-					cameraPosition.y -= 5.0f * deltaTime;
-				} else {
-					animacao = false;
-					zSomar = false;
-					cameraPosition = cameraFrontPosition;
-					cameraLookTo = cameraNormalLookTo;
-					cameraHead = cameraHeadNormal;
-				}
-			}
 		}
 		//---------------------------------------------------------------------------------------------------------------------------------------
 		glm::mat4 ViewMatrix = glm::lookAt(
@@ -599,189 +556,294 @@ int main( void )
 			cameraLookTo, // and looks here
 			cameraHead  // Head is up (set to 0,-1,0 to look upside-down)
 		);
-		glm::vec3 lightPos = glm::vec3(1, 11, -1);
+
+		glm::vec3 lightPos = glm::vec3(1, 0, 20);
 		glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
 
-		// -------------------------------------------------------------------  DRAW OBJETOS -----------------------------------------------------
-		//---------------   draw mesa inteira ----------------------------------------------------------------------------------------------------
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, mesaTexture);
-		glUniform1i(TextureID, 0);
+		if(start){
+			if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
+				if (!pKeyTimePressed || (currentTime - pKeyTimePressed) > 0.4) {
+					visualizarOrtho = !visualizarOrtho;
+					pKeyTimePressed = glfwGetTime();
+				}
+			}
+			if (visualizarOrtho) {
+				ProjectionMatrix = ortogonalProjection;
+			} else {
+				ProjectionMatrix = perspectiveProjection;
+			}
+			if (glfwGetKey(window, GLFW_KEY_F1) == GLFW_PRESS) {
+				animacao = false;
+				cameraPosition = cameraFrontPosition;
+				cameraLookTo = cameraNormalLookTo;
+				cameraHead = cameraHeadNormal;
+				gPosition1.z = 0.5f;
+			}
+			if (glfwGetKey(window, GLFW_KEY_F2) == GLFW_PRESS) {
+				animacao = false;
+				cameraPosition = cameraTopPosition;
+				cameraLookTo = cameraTopLookTo;
+				cameraHead = cameraHeadNormal;
+				gPosition1.z = 0.0f;
+			}
+			if (glfwGetKey(window, GLFW_KEY_F3) == GLFW_PRESS) {
+				animacao = false;
+				cameraPosition = cameraBackPosition;
+				cameraLookTo = cameraNormalLookTo;
+				cameraHead = cameraHeadNormal;
+				gPosition1.z = 0.5f;
+			}
+			if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && ((currentTime - EnterKeyTimePressed) > 0.4)) {
+				animacao = true;
+				zSomar = false;
+				cameraPosition = cameraFrontPosition;
+				cameraLookTo = cameraNormalLookTo;
+				cameraHead = cameraHeadNormal;
 
- 		bindBuffer(mesaVertexbuffer, mesaUvbuffer, mesaNormalbuffer, mesaElementbuffer, programID);
-		{
-			glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
-			glm::mat4 TranslationMatrix = translate(mat4(), gPosition1); // A bit to the left
-			glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
-			glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
-			glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+			}
+			//--------------- INICIO DA ANIMAÇÃO CAMERA -----------------------------------------------------------------------------------------------
+			if (animacao) {
+				if (cameraPosition.y < 10 && !zSomar) {
+					cameraPosition.y += 5.0f * deltaTime;
+				}
+				if (cameraPosition.y > 10) {
 
-			glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-			glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
-			glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
-			glDrawElements(GL_TRIANGLES, mesaIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
-		}
+					if (zSomar) {
+						cameraPosition.z += 5.0f * deltaTime;
+					} else {
+						cameraPosition.z -= 5.0f * deltaTime;
+					}
 
-		//--------------- draw botao amarelo ----------------------------------------------------------------------------------------------------
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, botaoAmareloTexture);
-		glUniform1i(TextureID, 0);
-		bindBuffer(botaoAmareloVertexbuffer, botaoAmareloUvbuffer, botaoAmareloNormalbuffer, botaoAmareloElementbuffer, programID);
- 		{
-			glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
-			glm::mat4 TranslationMatrix = translate(mat4(), gPosition1); // A bit to the left
-			glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
-			glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
-			glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+					if (cameraPosition.z < 0) {
+						zSomar = true;
+						cameraPosition.z *= -1;
+						cameraLookTo.z *= -1;
+					}
+				}
+				if (cameraPosition.z > 15 && zSomar) {
+					if (cameraPosition.y > 5) {
+						cameraPosition.y -= 5.0f * deltaTime;
+					} else {
+						animacao = false;
+						zSomar = false;
+						cameraPosition = cameraFrontPosition;
+						cameraLookTo = cameraNormalLookTo;
+						cameraHead = cameraHeadNormal;
+					}
+				}
+			}
+			
+			glm::vec3 lightPos = glm::vec3(1, 11, -1);
+			glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
 
-			glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-			glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
-			glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
-			glDrawElements(GL_TRIANGLES, botaoAmareloIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
-		}
+			// -------------------------------------------------------------------  DRAW OBJETOS -----------------------------------------------------
+			//---------------   draw mesa inteira ----------------------------------------------------------------------------------------------------
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, mesaTexture);
+			glUniform1i(TextureID, 0);
 
-		//--------------- draw botao azul --------------------------------------------------------------------------------------------------------
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, botaoAzulTexture);
-		glUniform1i(TextureID, 0);
-		bindBuffer(botaoAzulVertexbuffer, botaoAzulUvbuffer, botaoAzulNormalbuffer, botaoAzulElementbuffer, programID);
-		{
-			glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
-			glm::mat4 TranslationMatrix = translate(mat4(), gPosition1); // A bit to the left
-			glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
-			glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
-			glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+			bindBuffer(mesaVertexbuffer, mesaUvbuffer, mesaNormalbuffer, mesaElementbuffer, programID);
+			{
+				glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
+				glm::mat4 TranslationMatrix = translate(mat4(), gPosition1); // A bit to the left
+				glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
+				glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
+				glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+				glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+				glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
+				glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
+				glDrawElements(GL_TRIANGLES, mesaIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
+			}
 
-			glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-			glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
-			glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
-			glDrawElements(GL_TRIANGLES, botaoAzulIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
-		}
+			//--------------- draw botao amarelo ----------------------------------------------------------------------------------------------------
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, botaoAmareloTexture);
+			glUniform1i(TextureID, 0);
+			bindBuffer(botaoAmareloVertexbuffer, botaoAmareloUvbuffer, botaoAmareloNormalbuffer, botaoAmareloElementbuffer, programID);
+			{
+				glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
+				glm::mat4 TranslationMatrix = translate(mat4(), gPosition1); // A bit to the left
+				glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
+				glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
+				glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
 
-		//--------------- draw botao verde -------------------------------------------------------------------------------------------------------
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, botaoVerdeTexture);
-		glUniform1i(TextureID, 0);
- 		bindBuffer(botaoVerdeVertexbuffer, botaoVerdeUvbuffer, botaoVerdeNormalbuffer, botaoVerdeElementbuffer, programID);
- 		{
-			glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
-			glm::mat4 TranslationMatrix = translate(mat4(), gPosition1); // A bit to the left
-			glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
-			glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
-			glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+				glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+				glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
+				glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
+				glDrawElements(GL_TRIANGLES, botaoAmareloIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
+			}
 
-			glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-			glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
-			glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
-			glDrawElements(GL_TRIANGLES, botaoVerdeIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
-		}
+			//--------------- draw botao azul --------------------------------------------------------------------------------------------------------
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, botaoAzulTexture);
+			glUniform1i(TextureID, 0);
+			bindBuffer(botaoAzulVertexbuffer, botaoAzulUvbuffer, botaoAzulNormalbuffer, botaoAzulElementbuffer, programID);
+			{
+				glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
+				glm::mat4 TranslationMatrix = translate(mat4(), gPosition1); // A bit to the left
+				glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
+				glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
+				glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
 
-		//--------------- draw botao vermelho ----------------------------------------------------------------------------------------------------
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, botaoVermelhoTexture);
-		glUniform1i(TextureID, 0);
- 		bindBuffer(botaoVermelhoVertexbuffer, botaoVermelhoUvbuffer, botaoVermelhoNormalbuffer, botaoVermelhoElementbuffer, programID);
- 		{
-			glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
-			glm::mat4 TranslationMatrix = translate(mat4(), gPosition1); // A bit to the left
-			glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
-			glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
-			glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+				glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+				glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
+				glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
+				glDrawElements(GL_TRIANGLES, botaoAzulIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
+			}
 
-			glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-			glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
-			glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
-			glDrawElements(GL_TRIANGLES, botaoVermelhoIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
-		}
+			//--------------- draw botao verde -------------------------------------------------------------------------------------------------------
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, botaoVerdeTexture);
+			glUniform1i(TextureID, 0);
+			bindBuffer(botaoVerdeVertexbuffer, botaoVerdeUvbuffer, botaoVerdeNormalbuffer, botaoVerdeElementbuffer, programID);
+			{
+				glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
+				glm::mat4 TranslationMatrix = translate(mat4(), gPosition1); // A bit to the left
+				glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
+				glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
+				glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
 
-		//--------------- draw botaozinho esquerdo ----------------------------------------------------------------------------------------------
-		// glActiveTexture(GL_TEXTURE0);
-		// glBindTexture(GL_TEXTURE_2D, botaoAmareloEsquerdoTexture);
-		// glUniform1i(TextureID, 0);
- 		// bindBuffer(botaoAmareloEsquerdoVertexbuffer, botaoAmareloEsquerdoUvbuffer, botaoAmareloEsquerdoNormalbuffer, botaoAmareloEsquerdoElementbuffer, programID);
- 		// {
-		// 	glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
-		// 	glm::mat4 TranslationMatrix = translate(mat4(), gPosition1); // A bit to the left
-		// 	glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
-		// 	glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
-		// 	glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+				glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+				glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
+				glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
+				glDrawElements(GL_TRIANGLES, botaoVerdeIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
+			}
 
-		// 	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-		// 	glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
-		// 	glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
-		// 	glDrawElements(GL_TRIANGLES, botaoAmareloEsquerdoIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
-		// }
+			//--------------- draw botao vermelho ----------------------------------------------------------------------------------------------------
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, botaoVermelhoTexture);
+			glUniform1i(TextureID, 0);
+			bindBuffer(botaoVermelhoVertexbuffer, botaoVermelhoUvbuffer, botaoVermelhoNormalbuffer, botaoVermelhoElementbuffer, programID);
+			{
+				glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
+				glm::mat4 TranslationMatrix = translate(mat4(), gPosition1); // A bit to the left
+				glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
+				glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
+				glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
 
-		//--------------- draw botaozinho direito ------------------------------------------------------------------------------------------------
-		// glActiveTexture(GL_TEXTURE0);
-		// glBindTexture(GL_TEXTURE_2D, botaoAmareloDireitoTexture);
-		// glUniform1i(TextureID, 0);
- 		// bindBuffer(botaoAmareloDireitoVertexbuffer, botaoAmareloDireitoUvbuffer, botaoAmareloDireitoNormalbuffer, botaoAmareloDireitoElementbuffer, programID);
- 		// {
-		// 	glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
-		// 	glm::mat4 TranslationMatrix = translate(mat4(), gPosition1); // A bit to the left
-		// 	glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
-		// 	glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
-		// 	glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+				glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+				glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
+				glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
+				glDrawElements(GL_TRIANGLES, botaoVermelhoIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
+			}
 
-		// 	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-		// 	glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
-		// 	glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
-		// 	glDrawElements(GL_TRIANGLES, botaoAmareloDireitoIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
-		// }
+			//--------------- draw botaozinho esquerdo ----------------------------------------------------------------------------------------------
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, botaoAmareloEsquerdoTexture);
+			glUniform1i(TextureID, 0);
+			bindBuffer(botaoAmareloEsquerdoVertexbuffer, botaoAmareloEsquerdoUvbuffer, botaoAmareloEsquerdoNormalbuffer, botaoAmareloEsquerdoElementbuffer, programID);
+			{
+				glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
+				vec3 botaozinhoAmareloEsquerdoPosition = gPosition1;
+				// gPosition1 = (-0.5f, -1.0f, 0.5f);
+				botaozinhoAmareloEsquerdoPosition.x -= 0.015f;
+				botaozinhoAmareloEsquerdoPosition.z += 0.033f;
+				glm::mat4 TranslationMatrix = translate(mat4(), botaozinhoAmareloEsquerdoPosition); // A bit to the left
+				glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
+				glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
+				glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
 
-		//--------------- draw botaozinho central ------------------------------------------------------------------------------------------------
-		// glActiveTexture(GL_TEXTURE0);
-		// glBindTexture(GL_TEXTURE_2D, botaoVermelhoMeioTexture);
-		// glUniform1i(TextureID, 0);
- 		// bindBuffer(botaoVermelhoMeioVertexbuffer, botaoVermelhoMeioUvbuffer, botaoVermelhoMeioNormalbuffer, botaoVermelhoMeioElementbuffer, programID);
- 		// {
-		// 	glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
-		// 	glm::mat4 TranslationMatrix = translate(mat4(), gPosition1); // A bit to the left
-		// 	glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
-		// 	glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
-		// 	glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+				glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+				glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
+				glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
+				glDrawElements(GL_TRIANGLES, botaoAmareloEsquerdoIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
+			}
 
-		// 	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-		// 	glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
-		// 	glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
-		// 	glDrawElements(GL_TRIANGLES, botaoVermelhoMeioIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
-		// }
+			//--------------- draw botaozinho direito ------------------------------------------------------------------------------------------------
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, botaoAmareloDireitoTexture);
+			glUniform1i(TextureID, 0);
+			bindBuffer(botaoAmareloDireitoVertexbuffer, botaoAmareloDireitoUvbuffer, botaoAmareloDireitoNormalbuffer, botaoAmareloDireitoElementbuffer, programID);
+			{
+				glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
+				vec3 botaozinhoAmareloDireitoPosition = gPosition1;
+				botaozinhoAmareloDireitoPosition.x += 0.035f;
+				botaozinhoAmareloDireitoPosition.z += 0.033f;
+				glm::mat4 TranslationMatrix = translate(mat4(), botaozinhoAmareloDireitoPosition); // A bit to the left
+				glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
+				glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
+				glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
 
-		//--------------- draw resto do jogo externo ---------------------------------------------------------------------------------------------
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, restoJogoTexture);
-		glUniform1i(TextureID, 0);
-		bindBuffer(restoJogoVertexbuffer, restoJogoUvbuffer, restoJogoNormalbuffer, restoJogoElementbuffer, programID);
-		{
-			glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
-			glm::mat4 TranslationMatrix = translate(mat4(), gPosition1); // A bit to the left
-			glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
-			glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
-			glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+				glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+				glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
+				glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
+				glDrawElements(GL_TRIANGLES, botaoAmareloDireitoIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
+			}
 
-			glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-			glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
-			glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
-			glDrawElements(GL_TRIANGLES, restoJogoIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
-		}
+			//--------------- draw botaozinho central ------------------------------------------------------------------------------------------------
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, botaoVermelhoMeioTexture);
+			glUniform1i(TextureID, 0);
+			bindBuffer(botaoVermelhoMeioVertexbuffer, botaoVermelhoMeioUvbuffer, botaoVermelhoMeioNormalbuffer, botaoVermelhoMeioElementbuffer, programID);
+			{
+				glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
+				vec3 botaoVermelhoMeioPosition = gPosition1;
+				botaoVermelhoMeioPosition.x += 0.015f;
+				botaoVermelhoMeioPosition.z += 0.033f;
+				glm::mat4 TranslationMatrix = translate(mat4(), botaoVermelhoMeioPosition); // A bit to the left
+				glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
+				glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
+				glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
 
-		//--------------- draw circulo do centro jogo --------------------------------------------------------------------------------------------
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, meioRestoJogoTexture);
-		glUniform1i(TextureID, 0);
-		bindBuffer(meioRestoJogoVertexbuffer, meioRestoJogoUvbuffer, meioRestoJogoNormalbuffer, meioRestoJogoElementbuffer, programID);
-		{
-			glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
-			glm::mat4 TranslationMatrix = translate(mat4(), gPosition1); // A bit to the left
-			glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
-			glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
-			glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+				glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+				glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
+				glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
+				glDrawElements(GL_TRIANGLES, botaoVermelhoMeioIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
+			}
 
-			glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-			glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
-			glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
-			glDrawElements(GL_TRIANGLES, meioRestoJogoIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
+			//--------------- draw resto do jogo externo ---------------------------------------------------------------------------------------------
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, restoJogoTexture);
+			glUniform1i(TextureID, 0);
+			bindBuffer(restoJogoVertexbuffer, restoJogoUvbuffer, restoJogoNormalbuffer, restoJogoElementbuffer, programID);
+			{
+				glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
+				glm::mat4 TranslationMatrix = translate(mat4(), gPosition1); // A bit to the left
+				glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
+				glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
+				glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+
+				glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+				glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
+				glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
+				glDrawElements(GL_TRIANGLES, restoJogoIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
+			}
+
+			//--------------- draw circulo do centro jogo --------------------------------------------------------------------------------------------
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, meioRestoJogoTexture);
+			glUniform1i(TextureID, 0);
+			bindBuffer(meioRestoJogoVertexbuffer, meioRestoJogoUvbuffer, meioRestoJogoNormalbuffer, meioRestoJogoElementbuffer, programID);
+			{
+				glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
+				glm::mat4 TranslationMatrix = translate(mat4(), gPosition1); // A bit to the left
+				glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
+				glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
+				glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+
+				glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+				glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
+				glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
+				glDrawElements(GL_TRIANGLES, meioRestoJogoIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
+			}
+		}else{
+			//---------------  draw enter to start --------------------------------------------------------------------------------------------
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, EnterToStartTexture);
+			glUniform1i(TextureID, 0);
+			bindBuffer(EnterToStartVertexbuffer, EnterToStartUvbuffer, EnterToStartNormalbuffer, EnterToStartElementbuffer, programID);
+			{
+				glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
+				glm::mat4 TranslationMatrix = translate(mat4(), gPosition1); // A bit to the left
+				glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
+				glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
+				glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+
+				glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+				glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
+				glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
+				glDrawElements(GL_TRIANGLES, EnterToStartIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
+			}
 		}
 		//---------------   FIM DOS DRAWS OBJETOS   -------------------------------------------------------------------------------------------
 		glDisableVertexAttribArray(0);
