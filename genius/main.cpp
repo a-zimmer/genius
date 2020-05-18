@@ -214,7 +214,7 @@ int main( void )
 	GLuint botaoAmareloEsquerdoTexture = loadDDS("botaoAmareloEsquerdo.dds");
 	GLuint meioRestoJogoTexture = loadDDS("meioRestoJogo.dds");
 	GLuint restoJogoTexture = loadDDS("restoJogo.dds");
-	GLuint EnterToStartTexture = loadDDS("mesa-com-tostart-desgrama.dds");
+	GLuint telaInicialTexture = loadDDS("telaInicial.dds");
 
 	// Get a handle for our "myTextureSampler" uniform
 	GLuint TextureID  = glGetUniformLocation(programID, "myTextureSampler");
@@ -222,29 +222,29 @@ int main( void )
 	// Read our .obj file
 	//------------------------------------------------------------------  LOAD OBJETOS ---------------------------------------------------------
 	//------ ENTER TO START --------------------------------------------------------------------------------------------------------------------
-	std::vector<glm::vec3> EnterToStartVertices;
-	std::vector<glm::vec2> EnterToStartUvs;
-	std::vector<glm::vec3> EnterToStartNormals;
-	std::vector<unsigned short> EnterToStartIndices;
-	std::vector<glm::vec3> EnterToStartIndexedVertices;
-	std::vector<glm::vec2> EnterToStartIndexedUvs;
-	std::vector<glm::vec3> EnterToStartIndexedNormals;
-	GLuint EnterToStartVertexbuffer;
-	GLuint EnterToStartUvbuffer;
-	GLuint EnterToStartNormalbuffer;
-	GLuint EnterToStartElementbuffer;
-	bool EnterToStart = loadOBJ("start-to-enter.obj", EnterToStartVertices, EnterToStartUvs, EnterToStartNormals);
+	std::vector<glm::vec3> telaInicialVertices;
+	std::vector<glm::vec2> telaInicialUvs;
+	std::vector<glm::vec3> telaInicialNormals;
+	std::vector<unsigned short> telaInicialIndices;
+	std::vector<glm::vec3> telaInicialIndexedVertices;
+	std::vector<glm::vec2> telaInicialIndexedUvs;
+	std::vector<glm::vec3> telaInicialIndexedNormals;
+	GLuint telaInicialVertexbuffer;
+	GLuint telaInicialUvbuffer;
+	GLuint telaInicialNormalbuffer;
+	GLuint telaInicialElementbuffer;
+	bool telaInicial = loadOBJ("telaInicial.obj", telaInicialVertices, telaInicialUvs, telaInicialNormals);
 	// chama load buffers e cria buffer para o botao tal;
-	indexVBO(EnterToStartVertices, EnterToStartUvs, EnterToStartNormals, EnterToStartIndices, EnterToStartIndexedVertices, EnterToStartIndexedUvs, EnterToStartIndexedNormals);
+	indexVBO(telaInicialVertices, telaInicialUvs, telaInicialNormals, telaInicialIndices, telaInicialIndexedVertices, telaInicialIndexedUvs, telaInicialIndexedNormals);
 	loadBuffers(
-		EnterToStartIndices,
-		EnterToStartIndexedVertices,
-		EnterToStartIndexedUvs,
-		EnterToStartIndexedNormals,
-		&EnterToStartVertexbuffer,
-		&EnterToStartUvbuffer,
-		&EnterToStartNormalbuffer,
-		&EnterToStartElementbuffer
+		telaInicialIndices,
+		telaInicialIndexedVertices,
+		telaInicialIndexedUvs,
+		telaInicialIndexedNormals,
+		&telaInicialVertexbuffer,
+		&telaInicialUvbuffer,
+		&telaInicialNormalbuffer,
+		&telaInicialElementbuffer
 	);
 	// ----------------------------------------------------------- BOTAO AMARELO ---------------------------------------------------------------
 	std::vector<glm::vec3> botaoAmareloVertices;
@@ -493,6 +493,10 @@ int main( void )
 	// Get a handle for our "LightPosition" uniform
 	glUseProgram(programID);
 	GLuint LightID = glGetUniformLocation(programID, "LightPosition_worldspace");
+	GLuint botaoAmareloLightID = glGetUniformLocation(programID, "botaoAmareloLightPosition");
+	GLuint botaoAzulLightID = glGetUniformLocation(programID, "botaoAzulLightPosition");
+	GLuint botaoVerdeLightID = glGetUniformLocation(programID, "botaoVerdeLightPosition");
+	GLuint botaoVermelhoLightID = glGetUniformLocation(programID, "botaoVermelhoLightPosition");
 
 	// For speed computationS
 	double lastTime = glfwGetTime();
@@ -502,16 +506,16 @@ int main( void )
 	glm::vec3 cameraFrontPosition = glm::vec3(0, 5, 15);
 	glm::vec3 cameraBackPosition = glm::vec3(0, 5, -15);
 	glm::vec3 cameraTopPosition = glm::vec3(0, 10, 0);
-	glm::vec3 cameraStartGame = glm::vec3(0, 5, 25);
+	glm::vec3 cameraStartGamePosition = glm::vec3(0, 5, 24);
 
 	glm::vec3 cameraNormalLookTo = glm::vec3(0, 1, 0);
 	glm::vec3 cameraTopLookTo = glm::vec3(0, 1, -1);
-	glm::vec3 cameraStartGameLookTo = glm::vec3(0, 5, 0);
+	glm::vec3 cameraStartGameLookTo = glm::vec3(0, 3.5, 0);
 
 	glm::vec3 cameraHeadNormal = glm::vec3(0, 1, 0);
 	glm::vec3 cameraHeadUpsideDown = glm::vec3(0, -1, 0);
 
-	glm::vec3 cameraPosition = cameraStartGame;
+	glm::vec3 cameraPosition = cameraStartGamePosition;
 	glm::vec3 cameraLookTo = cameraStartGameLookTo;
 	glm::vec3 cameraHead = cameraHeadNormal;
 
@@ -519,8 +523,8 @@ int main( void )
 	bool zSomar = false;
 	bool visualizarOrtho = false;
 	double pKeyTimePressed;
-	double EnterKeyTimePressed;
-	bool start = false;
+	double startGameKeyTimePressed;
+	bool startGame = false;
 
 	glm::mat4 perspectiveProjection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
 	glm::mat4 ortogonalProjection = glm::ortho(-10.0f,10.0f,-10.0f,10.0f,0.0f,100.0f);
@@ -544,13 +548,13 @@ int main( void )
 
 		// Use our shader
 		glUseProgram(programID);
-		if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && !start) {
-			EnterKeyTimePressed = glfwGetTime();
-			start = true;
+		if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && !startGame) {
+			startGameKeyTimePressed = glfwGetTime();
+			startGame = true;
 			cameraPosition = cameraFrontPosition;
 			cameraLookTo = cameraNormalLookTo;
 		}
-		//---------------------------------------------------------------------------------------------------------------------------------------
+
 		glm::mat4 ViewMatrix = glm::lookAt(
 			cameraPosition, // Camera is here
 			cameraLookTo, // and looks here
@@ -560,18 +564,20 @@ int main( void )
 		glm::vec3 lightPos = glm::vec3(1, 0, 20);
 		glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
 
-		if(start){
+		if (startGame) {
 			if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
 				if (!pKeyTimePressed || (currentTime - pKeyTimePressed) > 0.4) {
 					visualizarOrtho = !visualizarOrtho;
 					pKeyTimePressed = glfwGetTime();
 				}
 			}
+
 			if (visualizarOrtho) {
 				ProjectionMatrix = ortogonalProjection;
 			} else {
 				ProjectionMatrix = perspectiveProjection;
 			}
+
 			if (glfwGetKey(window, GLFW_KEY_F1) == GLFW_PRESS) {
 				animacao = false;
 				cameraPosition = cameraFrontPosition;
@@ -579,6 +585,7 @@ int main( void )
 				cameraHead = cameraHeadNormal;
 				gPosition1.z = 0.5f;
 			}
+
 			if (glfwGetKey(window, GLFW_KEY_F2) == GLFW_PRESS) {
 				animacao = false;
 				cameraPosition = cameraTopPosition;
@@ -586,6 +593,7 @@ int main( void )
 				cameraHead = cameraHeadNormal;
 				gPosition1.z = 0.0f;
 			}
+
 			if (glfwGetKey(window, GLFW_KEY_F3) == GLFW_PRESS) {
 				animacao = false;
 				cameraPosition = cameraBackPosition;
@@ -593,7 +601,8 @@ int main( void )
 				cameraHead = cameraHeadNormal;
 				gPosition1.z = 0.5f;
 			}
-			if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && ((currentTime - EnterKeyTimePressed) > 0.4)) {
+
+			if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && ((currentTime - startGameKeyTimePressed) > 0.4)) {
 				animacao = true;
 				zSomar = false;
 				cameraPosition = cameraFrontPosition;
@@ -601,11 +610,12 @@ int main( void )
 				cameraHead = cameraHeadNormal;
 
 			}
-			//--------------- INICIO DA ANIMAÇÃO CAMERA -----------------------------------------------------------------------------------------------
+
 			if (animacao) {
 				if (cameraPosition.y < 10 && !zSomar) {
 					cameraPosition.y += 5.0f * deltaTime;
 				}
+
 				if (cameraPosition.y > 10) {
 
 					if (zSomar) {
@@ -620,6 +630,7 @@ int main( void )
 						cameraLookTo.z *= -1;
 					}
 				}
+
 				if (cameraPosition.z > 15 && zSomar) {
 					if (cameraPosition.y > 5) {
 						cameraPosition.y -= 5.0f * deltaTime;
@@ -632,9 +643,21 @@ int main( void )
 					}
 				}
 			}
-			
+
 			glm::vec3 lightPos = glm::vec3(1, 11, -1);
 			glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
+
+            glm::vec3 botaoAmareloLightPos = glm::vec3(10, 17, -1);
+            glUniform3f(botaoAmareloLightID, botaoAmareloLightPos.x, botaoAmareloLightPos.y, botaoAmareloLightPos.z);
+
+            glm::vec3 botaoAzulLightPos = glm::vec3(1, 11, -1);
+            glUniform3f(botaoAzulLightID, botaoAzulLightPos.x, botaoAzulLightPos.y, botaoAzulLightPos.z);
+
+            glm::vec3 botaoVerdeLightPos = glm::vec3(1, 2, -1);
+            glUniform3f(botaoVerdeLightID, botaoVerdeLightPos.x, botaoVerdeLightPos.y, botaoVerdeLightPos.z);
+
+            glm::vec3 botaoVermelhoLightPos = glm::vec3(1, -2, -1);
+            glUniform3f(botaoVermelhoLightID, botaoVermelhoLightPos.x, botaoVermelhoLightPos.y, botaoVermelhoLightPos.z);
 
 			// -------------------------------------------------------------------  DRAW OBJETOS -----------------------------------------------------
 			//---------------   draw mesa inteira ----------------------------------------------------------------------------------------------------
@@ -826,12 +849,12 @@ int main( void )
 				glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
 				glDrawElements(GL_TRIANGLES, meioRestoJogoIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
 			}
-		}else{
-			//---------------  draw enter to start --------------------------------------------------------------------------------------------
+		} else {
+			//---------------  draw enter to startGame --------------------------------------------------------------------------------------------
 			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, EnterToStartTexture);
+			glBindTexture(GL_TEXTURE_2D, telaInicialTexture);
 			glUniform1i(TextureID, 0);
-			bindBuffer(EnterToStartVertexbuffer, EnterToStartUvbuffer, EnterToStartNormalbuffer, EnterToStartElementbuffer, programID);
+			bindBuffer(telaInicialVertexbuffer, telaInicialUvbuffer, telaInicialNormalbuffer, telaInicialElementbuffer, programID);
 			{
 				glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
 				glm::mat4 TranslationMatrix = translate(mat4(), gPosition1); // A bit to the left
@@ -842,7 +865,7 @@ int main( void )
 				glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 				glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
 				glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
-				glDrawElements(GL_TRIANGLES, EnterToStartIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
+				glDrawElements(GL_TRIANGLES, telaInicialIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
 			}
 		}
 		//---------------   FIM DOS DRAWS OBJETOS   -------------------------------------------------------------------------------------------
