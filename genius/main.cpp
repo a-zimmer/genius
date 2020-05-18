@@ -510,7 +510,7 @@ int main( void )
 
 	glm::vec3 cameraNormalLookTo = glm::vec3(0, 1, 0);
 	glm::vec3 cameraTopLookTo = glm::vec3(0, 1, -1);
-	glm::vec3 cameraStartGameLookTo = glm::vec3(0, 3.5, 0);
+	glm::vec3 cameraStartGameLookTo = glm::vec3(-0.25, 3.65, 0);
 
 	glm::vec3 cameraHeadNormal = glm::vec3(0, 1, 0);
 	glm::vec3 cameraHeadUpsideDown = glm::vec3(0, -1, 0);
@@ -561,7 +561,7 @@ int main( void )
 			cameraHead  // Head is up (set to 0,-1,0 to look upside-down)
 		);
 
-		glm::vec3 lightPos = glm::vec3(1, 0, 20);
+		glm::vec3 lightPos = glm::vec3(0, 3, 18);
 		glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
 
 		if (startGame) {
@@ -644,20 +644,20 @@ int main( void )
 				}
 			}
 
-			glm::vec3 lightPos = glm::vec3(1, 11, -1);
+			lightPos = glm::vec3(1, 11, -1);
 			glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
 
             glm::vec3 botaoAmareloLightPos = glm::vec3(10, 17, -1);
             glUniform3f(botaoAmareloLightID, botaoAmareloLightPos.x, botaoAmareloLightPos.y, botaoAmareloLightPos.z);
 
-            glm::vec3 botaoAzulLightPos = glm::vec3(1, 11, -1);
-            glUniform3f(botaoAzulLightID, botaoAzulLightPos.x, botaoAzulLightPos.y, botaoAzulLightPos.z);
+            // glm::vec3 botaoAzulLightPos = glm::vec3(1, 11, -1);
+            // glUniform3f(botaoAzulLightID, botaoAzulLightPos.x, botaoAzulLightPos.y, botaoAzulLightPos.z);
 
-            glm::vec3 botaoVerdeLightPos = glm::vec3(1, 2, -1);
-            glUniform3f(botaoVerdeLightID, botaoVerdeLightPos.x, botaoVerdeLightPos.y, botaoVerdeLightPos.z);
+            // glm::vec3 botaoVerdeLightPos = glm::vec3(1, 2, -1);
+            // glUniform3f(botaoVerdeLightID, botaoVerdeLightPos.x, botaoVerdeLightPos.y, botaoVerdeLightPos.z);
 
-            glm::vec3 botaoVermelhoLightPos = glm::vec3(1, -2, -1);
-            glUniform3f(botaoVermelhoLightID, botaoVermelhoLightPos.x, botaoVermelhoLightPos.y, botaoVermelhoLightPos.z);
+            // glm::vec3 botaoVermelhoLightPos = glm::vec3(1, -2, -1);
+            // glUniform3f(botaoVermelhoLightID, botaoVermelhoLightPos.x, botaoVermelhoLightPos.y, botaoVermelhoLightPos.z);
 
 			// -------------------------------------------------------------------  DRAW OBJETOS -----------------------------------------------------
 			//---------------   draw mesa inteira ----------------------------------------------------------------------------------------------------
