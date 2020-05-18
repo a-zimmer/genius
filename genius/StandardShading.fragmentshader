@@ -29,7 +29,7 @@ void main()
 	vec3 LightColorYellow = vec3(1, 1, 0);
 
 	float defaultLightPower = 100.0f;
-	float buttonLightPower = 10.0f;
+	float buttonLightPower = 2.0f;
 
 	vec3 MaterialDiffuseColor = texture(myTextureSampler, UV).rgb;
 	vec3 MaterialAmbientColor = vec3(0.1,0.1,0.1) * MaterialDiffuseColor;

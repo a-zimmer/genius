@@ -527,7 +527,7 @@ int main( void )
 	bool startGame = false;
 
 	glm::mat4 perspectiveProjection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
-	glm::mat4 ortogonalProjection = glm::ortho(-10.0f,10.0f,-10.0f,10.0f,0.0f,100.0f);
+	glm::mat4 ortogonalProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.0f, 100.0f);
 	glm::mat4 ProjectionMatrix = perspectiveProjection;
 
 	do {
@@ -647,24 +647,23 @@ int main( void )
 			lightPos = glm::vec3(1, 11, -1);
 			glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
 
-            glm::vec3 botaoAmareloLightPos = glm::vec3(10, 17, -1);
+            glm::vec3 botaoAmareloLightPos = glm::vec3(0.7, 3.4, -1.45);
             glUniform3f(botaoAmareloLightID, botaoAmareloLightPos.x, botaoAmareloLightPos.y, botaoAmareloLightPos.z);
 
-            // glm::vec3 botaoAzulLightPos = glm::vec3(1, 11, -1);
-            // glUniform3f(botaoAzulLightID, botaoAzulLightPos.x, botaoAzulLightPos.y, botaoAzulLightPos.z);
+            glm::vec3 botaoAzulLightPos = glm::vec3(0.7, 3.4, -0.45);
+            glUniform3f(botaoAzulLightID, botaoAzulLightPos.x, botaoAzulLightPos.y, botaoAzulLightPos.z);
 
-            // glm::vec3 botaoVerdeLightPos = glm::vec3(1, 2, -1);
-            // glUniform3f(botaoVerdeLightID, botaoVerdeLightPos.x, botaoVerdeLightPos.y, botaoVerdeLightPos.z);
+            glm::vec3 botaoVerdeLightPos = glm::vec3(-0.45, 3.5, -1.55);
+            glUniform3f(botaoVerdeLightID, botaoVerdeLightPos.x, botaoVerdeLightPos.y, botaoVerdeLightPos.z);
 
-            // glm::vec3 botaoVermelhoLightPos = glm::vec3(1, -2, -1);
-            // glUniform3f(botaoVermelhoLightID, botaoVermelhoLightPos.x, botaoVermelhoLightPos.y, botaoVermelhoLightPos.z);
+            glm::vec3 botaoVermelhoLightPos = glm::vec3(-0.4, 3.4, -0.4);
+            glUniform3f(botaoVermelhoLightID, botaoVermelhoLightPos.x, botaoVermelhoLightPos.y, botaoVermelhoLightPos.z);
 
 			// -------------------------------------------------------------------  DRAW OBJETOS -----------------------------------------------------
 			//---------------   draw mesa inteira ----------------------------------------------------------------------------------------------------
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, mesaTexture);
 			glUniform1i(TextureID, 0);
-
 			bindBuffer(mesaVertexbuffer, mesaUvbuffer, mesaNormalbuffer, mesaElementbuffer, programID);
 			{
 				glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
