@@ -35,17 +35,25 @@ void main()
 	vec3 LightPosition_cameraspace = (V * vec4(LightPosition_worldspace, 1)).xyz;
 	LightDirection_cameraspace = LightPosition_cameraspace + EyeDirection_cameraspace;
 
-	vec3 botaoAmareloLightPosition_cameraspace = (V * vec4(botaoAmareloLightPosition, 1)).xyz;
-	botaoAmareloLightDirection_cameraspace = botaoAmareloLightPosition_cameraspace + EyeDirection_cameraspace;
+    if (vec3(0, 0, 0) != botaoAmareloLightPosition) {
+        vec3 botaoAmareloLightPosition_cameraspace = (V * vec4(botaoAmareloLightPosition, 1)).xyz;
+        botaoAmareloLightDirection_cameraspace = botaoAmareloLightPosition_cameraspace + EyeDirection_cameraspace;
+    }
 
-	vec3 botaoAzulLightPosition_cameraspace = (V * vec4(botaoAzulLightPosition, 1)).xyz;
-	botaoAzulLightDirection_cameraspace = botaoAzulLightPosition_cameraspace + EyeDirection_cameraspace;
+    if (vec3(0, 0, 0) != botaoAzulLightPosition) {
+        vec3 botaoAzulLightPosition_cameraspace = (V * vec4(botaoAzulLightPosition, 1)).xyz;
+        botaoAzulLightDirection_cameraspace = botaoAzulLightPosition_cameraspace + EyeDirection_cameraspace;
+    }
 
-	vec3 botaoVerdeLightPosition_cameraspace = (V * vec4(botaoVerdeLightPosition, 1)).xyz;
-	botaoVerdeLightDirection_cameraspace = botaoVerdeLightPosition_cameraspace + EyeDirection_cameraspace;
+    if (vec3(0, 0, 0) != botaoVerdeLightPosition) {
+        vec3 botaoVerdeLightPosition_cameraspace = (V * vec4(botaoVerdeLightPosition, 1)).xyz;
+        botaoVerdeLightDirection_cameraspace = botaoVerdeLightPosition_cameraspace + EyeDirection_cameraspace;
+    }
 
-	vec3 botaoVermelhoLightPosition_cameraspace = (V * vec4(botaoVermelhoLightPosition, 1)).xyz;
-	botaoVermelhoLightDirection_cameraspace = botaoVermelhoLightPosition_cameraspace + EyeDirection_cameraspace;
+    if (vec3(0, 0, 0) != botaoVermelhoLightPosition) {
+        vec3 botaoVermelhoLightPosition_cameraspace = (V * vec4(botaoVermelhoLightPosition, 1)).xyz;
+        botaoVermelhoLightDirection_cameraspace = botaoVermelhoLightPosition_cameraspace + EyeDirection_cameraspace;
+    }
 
 	Normal_cameraspace = (V * M * vec4(vertexNormal_modelspace, 0)).xyz;
 

@@ -35,56 +35,79 @@ void main()
 	vec3 MaterialAmbientColor = vec3(0.1,0.1,0.1) * MaterialDiffuseColor;
 	vec3 MaterialSpecularColor = vec3(0.3,0.3,0.3);
 
-
 	float distance = length(LightPosition_worldspace - Position_worldspace);
-	float botaoAmareloDistance = length(botaoAmareloLightPosition - Position_worldspace);
-	float botaoAzulDistance = length(botaoAzulLightPosition - Position_worldspace);
-	float botaoVerdeDistance = length(botaoVerdeLightPosition - Position_worldspace);
-	float botaoVermelhoDistance = length(botaoVermelhoLightPosition - Position_worldspace);
 
 	vec3 n = normalize(Normal_cameraspace);
 
 	vec3 l = normalize(LightDirection_cameraspace);
-	vec3 botaoAmareloL = normalize(botaoAmareloLightDirection_cameraspace);
-	vec3 botaoAzulL = normalize(botaoAzulLightDirection_cameraspace);
-	vec3 botaoVerdeL = normalize(botaoVerdeLightDirection_cameraspace);
-	vec3 botaoVermelhoL = normalize(botaoVermelhoLightDirection_cameraspace);
 
 	float cosTheta = clamp(dot(n, l), 0, 1);
-	float botaoAmareloCosTheta = clamp(dot(n, botaoAmareloL), 0, 1);
-	float botaoAzulCosTheta = clamp(dot(n, botaoAzulL), 0, 1);
-	float botaoVerdeCosTheta = clamp(dot(n, botaoVerdeL), 0, 1);
-	float botaoVermelhoCosTheta = clamp(dot(n, botaoVermelhoL), 0, 1);
 
 	vec3 E = normalize(EyeDirection_cameraspace);
 
 	vec3 R = reflect(-l,n);
-	vec3 botaoAmareloR = reflect(-botaoAmareloL, n);
-	vec3 botaoAzulR = reflect(-botaoAzulL, n);
-	vec3 botaoVerdeR = reflect(-botaoVerdeL, n);
-	vec3 botaoVermelhoR = reflect(-botaoVermelhoL, n);
 
 	float cosAlpha = clamp(dot(E, R), 0, 1);
-	float botaoAmareloCosAlpha = clamp(dot(E, botaoAmareloR), 0, 1);
-	float botaoAzulCosAlpha = clamp(dot(E, botaoAzulR), 0, 1);
-	float botaoVerdeCosAlpha = clamp(dot(E, botaoVerdeR), 0, 1);
-	float botaoVermelhoCosAlpha = clamp(dot(E, botaoVermelhoR), 0, 1);
 
-	color =
+    color =
 		MaterialAmbientColor +
 
 		MaterialDiffuseColor * LightColorWhite * defaultLightPower * cosTheta / (distance*distance) +
-		MaterialSpecularColor * LightColorWhite * defaultLightPower * pow(cosAlpha,5) / (distance*distance) +
+		MaterialSpecularColor * LightColorWhite * defaultLightPower * pow(cosAlpha,5) / (distance*distance);
 
-		MaterialDiffuseColor * LightColorYellow * buttonLightPower * botaoAmareloCosTheta / (botaoAmareloDistance*botaoAmareloDistance) +
-		MaterialSpecularColor * LightColorYellow * buttonLightPower * pow(botaoAmareloCosAlpha,5) / (botaoAmareloDistance*botaoAmareloDistance) +
+    if (vec3(0, 0, 0) != botaoAmareloLightPosition) {
+	    float botaoAmareloDistance = length(botaoAmareloLightPosition - Position_worldspace);
 
-		MaterialDiffuseColor * LightColorBlue * buttonLightPower * botaoAzulCosTheta / (botaoAzulDistance*botaoAzulDistance) +
-		MaterialSpecularColor * LightColorBlue * buttonLightPower * pow(botaoAzulCosAlpha,5) / (botaoAzulDistance*botaoAzulDistance) +
+	    vec3 botaoAmareloL = normalize(botaoAmareloLightDirection_cameraspace);
+	    float botaoAmareloCosTheta = clamp(dot(n, botaoAmareloL), 0, 1);
 
-		MaterialDiffuseColor * LightColorGreen * buttonLightPower * botaoVerdeCosTheta / (botaoVerdeDistance*botaoVerdeDistance) +
-		MaterialSpecularColor * LightColorGreen * buttonLightPower * pow(botaoVerdeCosAlpha,5) / (botaoVerdeDistance*botaoVerdeDistance) +
+	    vec3 botaoAmareloR = reflect(-botaoAmareloL, n);
+	    float botaoAmareloCosAlpha = clamp(dot(E, botaoAmareloR), 0, 1);
 
-		MaterialDiffuseColor * LightColorRed * buttonLightPower * botaoVermelhoCosTheta / (botaoVermelhoDistance*botaoVermelhoDistance) +
-		MaterialSpecularColor * LightColorRed * buttonLightPower * pow(botaoVermelhoCosAlpha,5) / (botaoVermelhoDistance*botaoVermelhoDistance);
+        color +=
+            MaterialDiffuseColor * LightColorYellow * buttonLightPower * botaoAmareloCosTheta / (botaoAmareloDistance*botaoAmareloDistance) +
+            MaterialSpecularColor * LightColorYellow * buttonLightPower * pow(botaoAmareloCosAlpha,5) / (botaoAmareloDistance*botaoAmareloDistance);
+    }
+
+    if (vec3(0, 0, 0) != botaoAzulLightPosition) {
+        float botaoAzulDistance = length(botaoAzulLightPosition - Position_worldspace);
+
+        vec3 botaoAzulL = normalize(botaoAzulLightDirection_cameraspace);
+        float botaoAzulCosTheta = clamp(dot(n, botaoAzulL), 0, 1);
+
+        vec3 botaoAzulR = reflect(-botaoAzulL, n);
+        float botaoAzulCosAlpha = clamp(dot(E, botaoAzulR), 0, 1);
+
+        color +=
+            MaterialDiffuseColor * LightColorBlue * buttonLightPower * botaoAzulCosTheta / (botaoAzulDistance*botaoAzulDistance) +
+            MaterialSpecularColor * LightColorBlue * buttonLightPower * pow(botaoAzulCosAlpha,5) / (botaoAzulDistance*botaoAzulDistance);
+    }
+
+    if (vec3(0, 0, 0) != botaoVerdeLightPosition) {
+        float botaoVerdeDistance = length(botaoVerdeLightPosition - Position_worldspace);
+
+        vec3 botaoVerdeL = normalize(botaoVerdeLightDirection_cameraspace);
+        float botaoVerdeCosTheta = clamp(dot(n, botaoVerdeL), 0, 1);
+
+        vec3 botaoVerdeR = reflect(-botaoVerdeL, n);
+        float botaoVerdeCosAlpha = clamp(dot(E, botaoVerdeR), 0, 1);
+
+        color +=
+            MaterialDiffuseColor * LightColorGreen * buttonLightPower * botaoVerdeCosTheta / (botaoVerdeDistance*botaoVerdeDistance) +
+            MaterialSpecularColor * LightColorGreen * buttonLightPower * pow(botaoVerdeCosAlpha,5) / (botaoVerdeDistance*botaoVerdeDistance);
+    }
+
+    if (vec3(0, 0, 0) != botaoVermelhoLightPosition) {
+        float botaoVermelhoDistance = length(botaoVermelhoLightPosition - Position_worldspace);
+
+        vec3 botaoVermelhoL = normalize(botaoVermelhoLightDirection_cameraspace);
+        float botaoVermelhoCosTheta = clamp(dot(n, botaoVermelhoL), 0, 1);
+
+        vec3 botaoVermelhoR = reflect(-botaoVermelhoL, n);
+        float botaoVermelhoCosAlpha = clamp(dot(E, botaoVermelhoR), 0, 1);
+
+        color +=
+            MaterialDiffuseColor * LightColorRed * buttonLightPower * botaoVermelhoCosTheta / (botaoVermelhoDistance*botaoVermelhoDistance) +
+            MaterialSpecularColor * LightColorRed * buttonLightPower * pow(botaoVermelhoCosAlpha,5) / (botaoVermelhoDistance*botaoVermelhoDistance);
+    }
 }

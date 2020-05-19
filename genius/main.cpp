@@ -543,6 +543,18 @@ int main( void )
 			lastTime += 1.0;
 		}
 
+        glm::vec3 botaoAmareloLightPos = glm::vec3(0, 0, 0);
+        glUniform3f(botaoAmareloLightID, botaoAmareloLightPos.x, botaoAmareloLightPos.y, botaoAmareloLightPos.z);
+
+        glm::vec3 botaoAzulLightPos = glm::vec3(0, 0, 0);
+        glUniform3f(botaoAzulLightID, botaoAzulLightPos.x, botaoAzulLightPos.y, botaoAzulLightPos.z);
+
+        glm::vec3 botaoVerdeLightPos = glm::vec3(0, 0, 0);
+        glUniform3f(botaoVerdeLightID, botaoVerdeLightPos.x, botaoVerdeLightPos.y, botaoVerdeLightPos.z);
+
+        glm::vec3 botaoVermelhoLightPos = glm::vec3(0, 0, 0);
+        glUniform3f(botaoVermelhoLightID, botaoVermelhoLightPos.x, botaoVermelhoLightPos.y, botaoVermelhoLightPos.z);
+
 		// Clear the screen
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -644,40 +656,11 @@ int main( void )
 				}
 			}
 
-			lightPos = glm::vec3(1, 11, -1);
-			glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
-
-            glm::vec3 botaoAmareloLightPos = glm::vec3(0.7, 3.4, -1.45);
+			// -------------------------------------------------------------------  DRAW OBJETOS -----------------------------------------------------
+			//--------------- draw botao amarelo ----------------------------------------------------------------------------------------------------
+            botaoAmareloLightPos = glm::vec3(0.7, 3.4, -1.45);
             glUniform3f(botaoAmareloLightID, botaoAmareloLightPos.x, botaoAmareloLightPos.y, botaoAmareloLightPos.z);
 
-            glm::vec3 botaoAzulLightPos = glm::vec3(0.7, 3.4, -0.45);
-            glUniform3f(botaoAzulLightID, botaoAzulLightPos.x, botaoAzulLightPos.y, botaoAzulLightPos.z);
-
-            glm::vec3 botaoVerdeLightPos = glm::vec3(-0.45, 3.5, -1.55);
-            glUniform3f(botaoVerdeLightID, botaoVerdeLightPos.x, botaoVerdeLightPos.y, botaoVerdeLightPos.z);
-
-            glm::vec3 botaoVermelhoLightPos = glm::vec3(-0.4, 3.4, -0.4);
-            glUniform3f(botaoVermelhoLightID, botaoVermelhoLightPos.x, botaoVermelhoLightPos.y, botaoVermelhoLightPos.z);
-
-			// -------------------------------------------------------------------  DRAW OBJETOS -----------------------------------------------------
-			//---------------   draw mesa inteira ----------------------------------------------------------------------------------------------------
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, mesaTexture);
-			glUniform1i(TextureID, 0);
-			bindBuffer(mesaVertexbuffer, mesaUvbuffer, mesaNormalbuffer, mesaElementbuffer, programID);
-			{
-				glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
-				glm::mat4 TranslationMatrix = translate(mat4(), gPosition1); // A bit to the left
-				glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
-				glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
-				glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
-				glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-				glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
-				glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
-				glDrawElements(GL_TRIANGLES, mesaIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
-			}
-
-			//--------------- draw botao amarelo ----------------------------------------------------------------------------------------------------
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, botaoAmareloTexture);
 			glUniform1i(TextureID, 0);
@@ -694,8 +677,13 @@ int main( void )
 				glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
 				glDrawElements(GL_TRIANGLES, botaoAmareloIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
 			}
+            botaoAmareloLightPos = glm::vec3(0, 0, 0);
+            glUniform3f(botaoAmareloLightID, botaoAmareloLightPos.x, botaoAmareloLightPos.y, botaoAmareloLightPos.z);
 
 			//--------------- draw botao azul --------------------------------------------------------------------------------------------------------
+            botaoAzulLightPos = glm::vec3(0.7, 3.4, -0.45);
+            glUniform3f(botaoAzulLightID, botaoAzulLightPos.x, botaoAzulLightPos.y, botaoAzulLightPos.z);
+
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, botaoAzulTexture);
 			glUniform1i(TextureID, 0);
@@ -712,8 +700,13 @@ int main( void )
 				glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
 				glDrawElements(GL_TRIANGLES, botaoAzulIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
 			}
+            botaoAzulLightPos = glm::vec3(0, 0, 0);
+            glUniform3f(botaoAzulLightID, botaoAzulLightPos.x, botaoAzulLightPos.y, botaoAzulLightPos.z);
 
 			//--------------- draw botao verde -------------------------------------------------------------------------------------------------------
+            botaoVerdeLightPos = glm::vec3(-0.45, 3.5, -1.55);
+            glUniform3f(botaoVerdeLightID, botaoVerdeLightPos.x, botaoVerdeLightPos.y, botaoVerdeLightPos.z);
+
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, botaoVerdeTexture);
 			glUniform1i(TextureID, 0);
@@ -730,8 +723,13 @@ int main( void )
 				glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
 				glDrawElements(GL_TRIANGLES, botaoVerdeIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
 			}
+            botaoVerdeLightPos = glm::vec3(0, 0, 0);
+            glUniform3f(botaoVerdeLightID, botaoVerdeLightPos.x, botaoVerdeLightPos.y, botaoVerdeLightPos.z);
 
 			//--------------- draw botao vermelho ----------------------------------------------------------------------------------------------------
+            botaoVermelhoLightPos = glm::vec3(-0.4, 3.4, -0.4);
+            glUniform3f(botaoVermelhoLightID, botaoVermelhoLightPos.x, botaoVermelhoLightPos.y, botaoVermelhoLightPos.z);
+
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, botaoVermelhoTexture);
 			glUniform1i(TextureID, 0);
@@ -747,6 +745,28 @@ int main( void )
 				glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
 				glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
 				glDrawElements(GL_TRIANGLES, botaoVermelhoIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
+			}
+            botaoVermelhoLightPos = glm::vec3(0, 0, 0);
+            glUniform3f(botaoVermelhoLightID, botaoVermelhoLightPos.x, botaoVermelhoLightPos.y, botaoVermelhoLightPos.z);
+
+            lightPos = glm::vec3(1, 11, -1);
+			glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
+
+			//---------------   draw mesa inteira ----------------------------------------------------------------------------------------------------
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, mesaTexture);
+			glUniform1i(TextureID, 0);
+			bindBuffer(mesaVertexbuffer, mesaUvbuffer, mesaNormalbuffer, mesaElementbuffer, programID);
+			{
+				glm::mat4 RotationMatrix = eulerAngleYXZ(gOrientation1.y, gOrientation1.x, gOrientation1.z);
+				glm::mat4 TranslationMatrix = translate(mat4(), gPosition1); // A bit to the left
+				glm::mat4 ScalingMatrix = scale(mat4(), vec3(1.0f, 1.0f, 1.0f));
+				glm::mat4 ModelMatrix = TranslationMatrix * RotationMatrix * ScalingMatrix;
+				glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+				glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+				glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
+				glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
+				glDrawElements(GL_TRIANGLES, mesaIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
 			}
 
 			//--------------- draw botaozinho esquerdo ----------------------------------------------------------------------------------------------
