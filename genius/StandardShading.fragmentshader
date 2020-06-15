@@ -19,6 +19,10 @@ uniform vec3 botaoAmareloLightPosition;
 uniform vec3 botaoAzulLightPosition;
 uniform vec3 botaoVerdeLightPosition;
 uniform vec3 botaoVermelhoLightPosition;
+uniform float botaoAmareloLightPower;
+uniform float botaoAzulLightPower;
+uniform float botaoVerdeLightPower;
+uniform float botaoVermelhoLightPower;
 
 void main()
 {
@@ -29,7 +33,6 @@ void main()
 	vec3 LightColorYellow = vec3(1, 1, 0);
 
 	float defaultLightPower = 100.0f;
-	float buttonLightPower = 2.0f;
 
 	vec3 MaterialDiffuseColor = texture(myTextureSampler, UV).rgb;
 	vec3 MaterialAmbientColor = vec3(0.1,0.1,0.1) * MaterialDiffuseColor;
@@ -65,8 +68,8 @@ void main()
 	    float botaoAmareloCosAlpha = clamp(dot(E, botaoAmareloR), 0, 1);
 
         color +=
-            MaterialDiffuseColor * LightColorYellow * buttonLightPower * botaoAmareloCosTheta / (botaoAmareloDistance*botaoAmareloDistance) +
-            MaterialSpecularColor * LightColorYellow * buttonLightPower * pow(botaoAmareloCosAlpha,5) / (botaoAmareloDistance*botaoAmareloDistance);
+            MaterialDiffuseColor * LightColorYellow * botaoAmareloLightPower * botaoAmareloCosTheta / (botaoAmareloDistance*botaoAmareloDistance) +
+            MaterialSpecularColor * LightColorYellow * botaoAmareloLightPower * pow(botaoAmareloCosAlpha,5) / (botaoAmareloDistance*botaoAmareloDistance);
     }
 
     if (vec3(0, 0, 0) != botaoAzulLightPosition) {
@@ -79,8 +82,8 @@ void main()
         float botaoAzulCosAlpha = clamp(dot(E, botaoAzulR), 0, 1);
 
         color +=
-            MaterialDiffuseColor * LightColorBlue * buttonLightPower * botaoAzulCosTheta / (botaoAzulDistance*botaoAzulDistance) +
-            MaterialSpecularColor * LightColorBlue * buttonLightPower * pow(botaoAzulCosAlpha,5) / (botaoAzulDistance*botaoAzulDistance);
+            MaterialDiffuseColor * LightColorBlue * botaoAzulLightPower * botaoAzulCosTheta / (botaoAzulDistance*botaoAzulDistance) +
+            MaterialSpecularColor * LightColorBlue * botaoAzulLightPower * pow(botaoAzulCosAlpha,5) / (botaoAzulDistance*botaoAzulDistance);
     }
 
     if (vec3(0, 0, 0) != botaoVerdeLightPosition) {
@@ -93,8 +96,8 @@ void main()
         float botaoVerdeCosAlpha = clamp(dot(E, botaoVerdeR), 0, 1);
 
         color +=
-            MaterialDiffuseColor * LightColorGreen * buttonLightPower * botaoVerdeCosTheta / (botaoVerdeDistance*botaoVerdeDistance) +
-            MaterialSpecularColor * LightColorGreen * buttonLightPower * pow(botaoVerdeCosAlpha,5) / (botaoVerdeDistance*botaoVerdeDistance);
+            MaterialDiffuseColor * LightColorGreen * botaoVerdeLightPower * botaoVerdeCosTheta / (botaoVerdeDistance*botaoVerdeDistance) +
+            MaterialSpecularColor * LightColorGreen * botaoVerdeLightPower * pow(botaoVerdeCosAlpha,5) / (botaoVerdeDistance*botaoVerdeDistance);
     }
 
     if (vec3(0, 0, 0) != botaoVermelhoLightPosition) {
@@ -107,7 +110,7 @@ void main()
         float botaoVermelhoCosAlpha = clamp(dot(E, botaoVermelhoR), 0, 1);
 
         color +=
-            MaterialDiffuseColor * LightColorRed * buttonLightPower * botaoVermelhoCosTheta / (botaoVermelhoDistance*botaoVermelhoDistance) +
-            MaterialSpecularColor * LightColorRed * buttonLightPower * pow(botaoVermelhoCosAlpha,5) / (botaoVermelhoDistance*botaoVermelhoDistance);
+            MaterialDiffuseColor * LightColorRed * botaoVermelhoLightPower * botaoVermelhoCosTheta / (botaoVermelhoDistance*botaoVermelhoDistance) +
+            MaterialSpecularColor * LightColorRed * botaoVermelhoLightPower * pow(botaoVermelhoCosAlpha,5) / (botaoVermelhoDistance*botaoVermelhoDistance);
     }
 }

@@ -2,6 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
+#include <queue>
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
 // Include GLEW
 #include <GL/glew.h>
 // Include GLFW
@@ -118,6 +122,52 @@ void Render(GLuint MatrixID, GLuint Texture, GLuint TextureID, int indiceFinal, 
 		GL_UNSIGNED_SHORT,   // type
 		(void*)0        // elemenft array buffer offset
 	);
+}
+
+/*
+ * Sortea o código da cor (entre 1 e 4)
+ * 1: Amarelo;
+ * 2: Azul;
+ * 3: Verde;
+ * 4: Vermelho;
+*/
+int sortearCor(int lastCorSorteada)
+{
+	srand((int)time(0));
+	int cor = (rand() % 4) + 1;
+
+	if (cor == lastCorSorteada) {
+		cor = sortearCor(lastCorSorteada);
+	}
+
+	return cor;
+}
+
+bool acertouOrdem(std::queue<int> corSelecionadaJogo, std::queue<int> corSelecionadaJogador)
+{
+	if (corSelecionadaJogo.front() != corSelecionadaJogador.front()) {
+		return false;
+	}
+
+	corSelecionadaJogo.pop();
+	corSelecionadaJogador.pop();
+
+	if ((!corSelecionadaJogo.empty() && corSelecionadaJogador.empty()) ||
+		(corSelecionadaJogo.empty() && !corSelecionadaJogador.empty())
+	) {
+		return false;
+	}
+
+	if (corSelecionadaJogo.empty() && corSelecionadaJogador.empty()) {
+		return true;
+	}
+
+	return acertouOrdem(corSelecionadaJogo, corSelecionadaJogador);
+}
+
+std::queue<int> clear()
+{
+   return std::queue<int>();
 }
 
 // ------------------------------------------------------    INT MAIN    -----------------------------------------------------------------
@@ -498,6 +548,11 @@ int main( void )
 	GLuint botaoVerdeLightID = glGetUniformLocation(programID, "botaoVerdeLightPosition");
 	GLuint botaoVermelhoLightID = glGetUniformLocation(programID, "botaoVermelhoLightPosition");
 
+	GLuint botaoAmareloLightPowerID = glGetUniformLocation(programID, "botaoAmareloLightPower");
+	GLuint botaoAzulLightPowerID = glGetUniformLocation(programID, "botaoAzulLightPower");
+	GLuint botaoVerdeLightPowerID = glGetUniformLocation(programID, "botaoVerdeLightPower");
+	GLuint botaoVermelhoLightPowerID = glGetUniformLocation(programID, "botaoVermelhoLightPower");
+
 	// For speed computationS
 	double lastTime = glfwGetTime();
 	double lastFrameTime = lastTime;
@@ -506,29 +561,49 @@ int main( void )
 	glm::vec3 cameraFrontPosition = glm::vec3(0, 5, 15);
 	glm::vec3 cameraBackPosition = glm::vec3(0, 5, -15);
 	glm::vec3 cameraTopPosition = glm::vec3(0, 10, 0);
-	glm::vec3 cameraStartGamePosition = glm::vec3(0, 5, 24);
+	glm::vec3 cameraTelaInicialPosition = glm::vec3(0, 5, 24);
 
 	glm::vec3 cameraNormalLookTo = glm::vec3(0, 1, 0);
 	glm::vec3 cameraTopLookTo = glm::vec3(0, 1, -1);
-	glm::vec3 cameraStartGameLookTo = glm::vec3(-0.25, 3.65, 0);
+	glm::vec3 cameraTelaInicialLookTo = glm::vec3(-0.25, 3.65, 0);
 
 	glm::vec3 cameraHeadNormal = glm::vec3(0, 1, 0);
 	glm::vec3 cameraHeadUpsideDown = glm::vec3(0, -1, 0);
 
-	glm::vec3 cameraPosition = cameraStartGamePosition;
-	glm::vec3 cameraLookTo = cameraStartGameLookTo;
+	glm::vec3 cameraPosition = cameraTelaInicialPosition;
+	glm::vec3 cameraLookTo = cameraTelaInicialLookTo;
 	glm::vec3 cameraHead = cameraHeadNormal;
 
-	bool animacao = false;
 	bool zSomar = false;
+	bool animacao = false;
 	bool visualizarOrtho = false;
+	bool renderTelaInicial = false;
+
+	bool keyUpPressed = false;
+	bool keyDownPressed = false;
+	bool keyRightPressed = false;
+	bool keyLeftPressed = false;
+
 	double pKeyTimePressed;
-	double startGameKeyTimePressed;
-	bool startGame = false;
+	double telaInicialKeyTimePressed;
+	double direcoesKeyTimePressed;
+	double luzLigadaTimePassed;
+
+	double luzBotaoLigada = 2.0f;
+	double luzBotaoDesligada = 0.0f;
+
+	int totalBotoes = 2;
+	int pontuacao = 0;
+
+	bool todosBotoesExibidos = false;
+	bool gameOver = false;
 
 	glm::mat4 perspectiveProjection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
 	glm::mat4 ortogonalProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.0f, 100.0f);
 	glm::mat4 ProjectionMatrix = perspectiveProjection;
+
+	std::queue<int> corSelecionadaJogo;
+	std::queue<int> corSelecionadaJogador;
 
 	do {
 		// Measure speed
@@ -536,8 +611,7 @@ int main( void )
 		float deltaTime = (float)(currentTime - lastFrameTime);
 		lastFrameTime = currentTime;
 		nbFrames++;
-		if ( currentTime - lastTime >= 1.0 ){ // If last prinf() was more than 1sec ago
-			// printf and reset
+		if ( currentTime - lastTime >= 1.0 ) {
 			printf("%f ms/frame\n", 1000.0/double(nbFrames));
 			nbFrames = 0;
 			lastTime += 1.0;
@@ -560,11 +634,11 @@ int main( void )
 
 		// Use our shader
 		glUseProgram(programID);
-		if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && !startGame) {
-			startGameKeyTimePressed = glfwGetTime();
-			startGame = true;
-			cameraPosition = cameraFrontPosition;
-			cameraLookTo = cameraNormalLookTo;
+		if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && !renderTelaInicial) {
+			telaInicialKeyTimePressed = glfwGetTime();
+			renderTelaInicial = true;
+			cameraPosition = cameraTopPosition;
+			cameraLookTo = cameraTopLookTo;
 		}
 
 		glm::mat4 ViewMatrix = glm::lookAt(
@@ -576,7 +650,7 @@ int main( void )
 		glm::vec3 lightPos = glm::vec3(0, 3, 18);
 		glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
 
-		if (startGame) {
+		if (renderTelaInicial && !gameOver && pontuacao < 1000) {
 			if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
 				if (!pKeyTimePressed || (currentTime - pKeyTimePressed) > 0.4) {
 					visualizarOrtho = !visualizarOrtho;
@@ -614,7 +688,7 @@ int main( void )
 				gPosition1.z = 0.5f;
 			}
 
-			if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && ((currentTime - startGameKeyTimePressed) > 0.4)) {
+			if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && ((currentTime - telaInicialKeyTimePressed) > 1)) {
 				animacao = true;
 				zSomar = false;
 				cameraPosition = cameraFrontPosition;
@@ -654,6 +728,84 @@ int main( void )
 						cameraHead = cameraHeadNormal;
 					}
 				}
+			}
+
+			if (todosBotoesExibidos) {
+				if (!luzLigadaTimePassed || (currentTime - luzLigadaTimePassed) > 1.5) {
+					glUniform1f(botaoAmareloLightPowerID, luzBotaoDesligada);
+					glUniform1f(botaoAzulLightPowerID, luzBotaoDesligada);
+					glUniform1f(botaoVerdeLightPowerID, luzBotaoDesligada);
+					glUniform1f(botaoVermelhoLightPowerID, luzBotaoDesligada);
+				}
+
+				// Amarelo
+				if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS 
+					&& (!direcoesKeyTimePressed || (currentTime - direcoesKeyTimePressed) > 0.2)
+				) {
+					keyUpPressed = true;
+					direcoesKeyTimePressed = glfwGetTime();
+					corSelecionadaJogador.push(1);
+					glUniform1f(botaoAmareloLightPowerID, luzBotaoLigada);
+				}
+
+				// Vermelho
+				if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS 
+					&& (!direcoesKeyTimePressed || (currentTime - direcoesKeyTimePressed) > 0.2)
+				) {
+					keyDownPressed = true;
+					direcoesKeyTimePressed = glfwGetTime();
+					corSelecionadaJogador.push(4);
+					glUniform1f(botaoVermelhoLightPowerID, luzBotaoLigada);
+				}
+
+				// Azul
+				if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS 
+					&& (!direcoesKeyTimePressed || (currentTime - direcoesKeyTimePressed) > 0.2)
+				) {
+					keyRightPressed = true;
+					direcoesKeyTimePressed = glfwGetTime();
+					corSelecionadaJogador.push(2);
+					glUniform1f(botaoAzulLightPowerID, luzBotaoLigada);
+				}
+
+				// Verde
+				if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS 
+					&& (!direcoesKeyTimePressed || (currentTime - direcoesKeyTimePressed) > 0.2)
+				) {
+					keyLeftPressed = true;
+					direcoesKeyTimePressed = glfwGetTime();
+					corSelecionadaJogador.push(3);
+					glUniform1f(botaoVerdeLightPowerID, luzBotaoLigada);
+				}
+
+				if ((keyUpPressed || keyDownPressed || keyRightPressed || keyLeftPressed)
+					&& (currentTime - direcoesKeyTimePressed) > 1
+				) {
+					if (acertouOrdem(corSelecionadaJogo, corSelecionadaJogador)) {
+						keyUpPressed = keyDownPressed = keyRightPressed = keyLeftPressed = false;
+						corSelecionadaJogador = clear();
+						totalBotoes++;
+						todosBotoesExibidos = !todosBotoesExibidos;
+						pontuacao += 10;
+					} else {
+						gameOver = true;
+					}
+				} else if (direcoesKeyTimePressed && (currentTime - direcoesKeyTimePressed) > 1.0) {
+					glUniform1f(botaoAmareloLightPowerID, luzBotaoDesligada);
+					glUniform1f(botaoAzulLightPowerID, luzBotaoDesligada);
+					glUniform1f(botaoVerdeLightPowerID, luzBotaoDesligada);
+					glUniform1f(botaoVermelhoLightPowerID, luzBotaoDesligada);
+				}
+			} else if (corSelecionadaJogo.size() < totalBotoes && 
+				(!luzLigadaTimePassed || (currentTime - luzLigadaTimePassed) >= 1.5)
+			) {
+				corSelecionadaJogo.push(sortearCor(corSelecionadaJogo.empty() ? 0 : corSelecionadaJogo.back()));
+
+				glUniform1f(botaoAmareloLightPowerID, corSelecionadaJogo.back() == 1 ? luzBotaoLigada : luzBotaoDesligada);
+				glUniform1f(botaoAzulLightPowerID, corSelecionadaJogo.back() == 2 ? luzBotaoLigada : luzBotaoDesligada);
+				glUniform1f(botaoVerdeLightPowerID, corSelecionadaJogo.back() == 3 ? luzBotaoLigada : luzBotaoDesligada);
+				glUniform1f(botaoVermelhoLightPowerID, corSelecionadaJogo.back() == 4 ? luzBotaoLigada : luzBotaoDesligada);
+				luzLigadaTimePassed = glfwGetTime();
 			}
 
 			// -------------------------------------------------------------------  DRAW OBJETOS -----------------------------------------------------
@@ -868,8 +1020,12 @@ int main( void )
 				glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
 				glDrawElements(GL_TRIANGLES, meioRestoJogoIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
 			}
-		} else {
-			//---------------  draw enter to startGame --------------------------------------------------------------------------------------------
+
+			if (corSelecionadaJogo.size() == totalBotoes) {
+				todosBotoesExibidos = !todosBotoesExibidos;
+			}
+		} else if (!gameOver && pontuacao < 1000) {
+			//---------------  draw enter to renderTelaInicial --------------------------------------------------------------------------------------------
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, telaInicialTexture);
 			glUniform1i(TextureID, 0);
@@ -886,6 +1042,10 @@ int main( void )
 				glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
 				glDrawElements(GL_TRIANGLES, telaInicialIndices.size(), GL_UNSIGNED_SHORT, (void*) 0);
 			}
+		} else if (gameOver && pontuacao < 1000) {
+			printf("Fim de Jogo. Você foi derrotado!\n");
+		} else {
+			printf("Fim de Jogo. Vitória!\n");
 		}
 		//---------------   FIM DOS DRAWS OBJETOS   -------------------------------------------------------------------------------------------
 		glDisableVertexAttribArray(0);
